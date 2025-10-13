@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "wdkoR+doQOs=",
+  "success": true,
+  "projectFilePath": "/Users/matty_pro23/Documents/C#/Tp Progra II/Medilink/Medilink.csproj",
+  "expectedPackageFiles": [
+    "/Users/matty_pro23/.nuget/packages/microsoft.aspnetcore.openapi/9.0.8/microsoft.aspnetcore.openapi.9.0.8.nupkg.sha512",
+    "/Users/matty_pro23/.nuget/packages/microsoft.openapi/1.6.17/microsoft.openapi.1.6.17.nupkg.sha512"
+  ],
+  "logs": []
+}
