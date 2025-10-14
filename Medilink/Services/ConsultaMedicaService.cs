@@ -13,13 +13,19 @@ namespace Medilink.Services
         }
         public async Task<ConsultaMedica> AddConsulta(ConsultaMedica consulta)
         {
-
-            throw new NotImplementedException();
+            _context.Consultas.AddAsync(consulta);
+            _context.SaveChangesAsync();
+            return consulta;
         }
 
         public async Task<bool> EliminarConsulta(int id)
         {
-            throw new NotImplementedException();
+            var consulta = await GetConsulta(id);
+            if (consulta == null) return false;
+
+            _context.Remove(id);
+            _context.SaveChangesAsync();
+            return true;
         }
 
         public async Task<ConsultaMedica> GetConsulta(int id)
@@ -34,7 +40,17 @@ namespace Medilink.Services
 
         public async Task<bool> UpdateConsulta(ConsultaMedica consulta)
         {
-            throw new NotImplementedException();
+            var ConsultaExiste = await GetConsulta(consulta.Id);
+            if (ConsultaExiste == null) return false;
+            consulta.IdMedico = consulta.IdMedico;
+            consulta.IdPaciente = consulta.IdPaciente;
+            ConsultaExiste.Estado = consulta.Estado;
+            ConsultaExiste.Observaciones = consulta.Observaciones;
+            ConsultaExiste.Medico = consulta.Medico;
+            //Añadir parte para Paciente
+            ConsultaExiste.Fecha = consulta.Fecha;
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         public void RecetarMedicamentos(){}
