@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 namespace Medilink.Context
 {
 
-    public class ApplicationDbContext : DbContext
+    public class MedilinkDbContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        public MedilinkDbContext(DbContextOptions<MedilinkDbContext> options) : base(options)
         {
         }
 
@@ -34,13 +34,17 @@ namespace Medilink.Context
                     .IsRequired();
 
                 entity.Property(e => e.Especialidad).IsRequired();
-               
+
                 // Creamos un índice único para la matricula para evitar duplicados
                 entity.HasIndex(e => e.Matricula).IsUnique();
             });
-            modelBuilder.Entity<Medico>();
-            //modelBuilder.Entity<ConsultaMedica>().HasKey(e => e.Id);
-            //modelBuilder.Entity<ConsultaMedica>().HasOne(c => c.).WithMany(m => m.Consultas).HasForeignKey(c => c.IdMedico);
+
+            modelBuilder.Entity<ConsultaMedica>().HasKey(e => e.Id);
+            modelBuilder.Entity<ConsultaMedica>().HasOne(c => c.Medico).WithMany(m => m.Consultas).HasForeignKey(c => c.IdMedico).OnDelete(DeleteBehavior.Restrict);
+            //Falta añadir paciente 
+            modelBuilder.Entity<ConsultaMedica>().Property(c => c.Estado).IsRequired();
+            modelBuilder.Entity<ConsultaMedica>().Property(c => c.Observaciones).HasMaxLength(100);
+            modelBuilder.Entity<ConsultaMedica>().Property(c => c.Fecha).IsRequired();
 
 
         }
