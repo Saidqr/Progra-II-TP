@@ -6,6 +6,9 @@ namespace Medilink.Models
         public int IdMedico { get; set; }
         public int IdPaciente { get; set; }
         public string Estado { get; set; }
+        public string Observaciones { get; set; }
+        public Medico Medico { get; set; }
+        //public Paciente paciente {get; set;}
         public DateTime Fecha { get; set; }
         
 
