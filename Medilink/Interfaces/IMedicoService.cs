@@ -4,9 +4,9 @@ namespace Medilink.Interfaces
 {
     public interface IMedicoService
     {
-        public Task<List<Medico>> GetMedicos();
+        public Task<IEnumerable<Medico>> GetMedicos();
         public Task<Medico> GetMedico(int id);
-        public Task<ConsultaMedica> AddMedico(Medico medico);
+        public Task<Medico> AddMedico(Medico medico);
         public Task<bool> UpdateMedico(Medico medico);
         public Task<bool> DeleteMedico(int id);
     }
