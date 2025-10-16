@@ -1,0 +1,8 @@
+# Archivos y carpetas de compilación de .NET
+**/[Oo]bj/
+**/[Bb]in/
+
+# Archivos de usuario de Visual Studio
+.vs/
+*.suo
+*.user
