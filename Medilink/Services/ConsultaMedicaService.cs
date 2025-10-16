@@ -49,8 +49,18 @@ namespace Medilink.Services
             ConsultaExiste.Medico = consulta.Medico;
             //Añadir parte para Paciente
             ConsultaExiste.Fecha = consulta.Fecha;
-            await _context.SaveChangesAsync();
-            return true;
+            try
+            {
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!await _context.Consultas.AnyAsync(m => m.Id == consulta.Id))
+                    return false;
+                else
+                    throw;
+            }
         }
 
         public void RecetarMedicamentos(){}
