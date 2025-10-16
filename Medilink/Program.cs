@@ -8,7 +8,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+        options.JsonSerializerOptions.MaxDepth = 64; // opcional
+    });
 
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -28,7 +32,6 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddScoped<IConsultaMedicaService, ConsultaMedicaService>();
 builder.Services.AddScoped<IMedicoService,MedicoService>();
 
-builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var app = builder.Build();
