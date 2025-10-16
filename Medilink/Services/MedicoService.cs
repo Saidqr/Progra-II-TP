@@ -1,44 +1,57 @@
 using Medilink.Interfaces;
 using Medilink.Models;
-
+using Medilink.Context;
+using Microsoft.EntityFrameworkCore;
 namespace Medilink.Services
 {
     public class MedicoService : IMedicoService
     {
-        public void AddMedico(Medico medico, int id)
+        private readonly MedilinkDbContext _context;
+        public MedicoService(MedilinkDbContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public void AddMedico(Medico medico)
+        public async Task<IEnumerable<Medico>> GetMedicos()
         {
-            throw new NotImplementedException();
+            return await _context.Medicos.ToListAsync();
         }
 
-        public void DeleteMedico(int id)
+        public async Task<Medico> GetMedico(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Medicos.FindAsync(id);
         }
-
-        public Medico GetMedico(int id)
+        public async Task<Medico> AddMedico(Medico medico)
         {
-            throw new NotImplementedException();
+            _context.Medicos.Add(medico);
+            _context.SaveChangesAsync();
+            return medico;
         }
-
-        public List<Medico> GetMedicos()
+        public async Task<bool> UpdateMedico(Medico medico)
         {
-            throw new NotImplementedException();
+            _context.Entry(medico).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!await _context.Medicos.AnyAsync(m => m.Id == medico.Id))
+                    return false;
+                else
+                    throw;
+            }
         }
-
-        public void UpdateMedico(int id)
+        public async Task<bool> DeleteMedico(int id)
         {
-            throw new NotImplementedException();
-        }
+            var medico = await GetMedico(id);
+            if (medico == null) return false;
 
-        public void UpdateMedico(Medico medico)
-        {
-            throw new NotImplementedException();
+            _context.Remove(id);
+            _context.SaveChangesAsync();
+            return true;
         }
     }
-
 }

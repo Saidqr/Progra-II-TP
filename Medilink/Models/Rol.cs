@@ -1,5 +1,5 @@
 
-public interface IRol
+public abstract class Rol
 {
     public int Id { get; set; }
     public string Nombre { get; set; }
