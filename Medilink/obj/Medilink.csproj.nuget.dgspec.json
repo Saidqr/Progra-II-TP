@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/Users/matty_pro23/Documents/C#/Tp Progra II/Medilink/Medilink.csproj": {}
+    "C:\\Users\\Matt\\OneDrive - uap.edu.ar\\Programacion I\\Tp APIS II\\Progra-II-TP\\Medilink\\Medilink.csproj": {}
   },
   "projects": {
-    "/Users/matty_pro23/Documents/C#/Tp Progra II/Medilink/Medilink.csproj": {
+    "C:\\Users\\Matt\\OneDrive - uap.edu.ar\\Programacion I\\Tp APIS II\\Progra-II-TP\\Medilink\\Medilink.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/matty_pro23/Documents/C#/Tp Progra II/Medilink/Medilink.csproj",
+        "projectUniqueName": "C:\\Users\\Matt\\OneDrive - uap.edu.ar\\Programacion I\\Tp APIS II\\Progra-II-TP\\Medilink\\Medilink.csproj",
         "projectName": "Medilink",
-        "projectPath": "/Users/matty_pro23/Documents/C#/Tp Progra II/Medilink/Medilink.csproj",
-        "packagesPath": "/Users/matty_pro23/.nuget/packages/",
-        "outputPath": "/Users/matty_pro23/Documents/C#/Tp Progra II/Medilink/obj/",
+        "projectPath": "C:\\Users\\Matt\\OneDrive - uap.edu.ar\\Programacion I\\Tp APIS II\\Progra-II-TP\\Medilink\\Medilink.csproj",
+        "packagesPath": "C:\\Users\\Matt\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Matt\\OneDrive - uap.edu.ar\\Programacion I\\Tp APIS II\\Progra-II-TP\\Medilink\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/matty_pro23/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Matt\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
@@ -52,7 +52,7 @@
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[9.0.9, )"
+              "version": "[9.0.10, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
@@ -88,7 +88,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.304/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

@@ -1,5 +1,6 @@
 using Medilink.Models;
 using Medilink.Services;
+using Medilink.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Medilink.Controllers;
@@ -8,8 +9,8 @@ namespace Medilink.Controllers;
 [Route("api/[controller]")]
 public class ConsultaMedicaController : ControllerBase
 {
-    private readonly ConsultaMedicaService _consultaService;
-    public ConsultaMedicaController(ConsultaMedicaService consultaService)
+    private readonly IConsultaMedicaService _consultaService;
+    public ConsultaMedicaController(IConsultaMedicaService consultaService)
     {
         _consultaService = consultaService;
     }
