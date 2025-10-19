@@ -1,4 +1,5 @@
 using System.Runtime.Versioning;
+using Medilink.Interfaces;
 using Medilink.Models;
 using Medilink.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +19,7 @@ public class HospitalesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<Actionresult<IEnumerable<Hospital>>> GetAll()
+    public async Task<ActionResult<IEnumerable<Hospital>>> GetAll()
     {
         var hospitales = await _hospitalService.GetHospitals();
         return Ok(hospitales);

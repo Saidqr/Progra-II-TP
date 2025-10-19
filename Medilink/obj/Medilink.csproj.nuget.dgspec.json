@@ -1,25 +1,31 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Matt\\OneDrive - uap.edu.ar\\Programacion I\\Tp APIS II\\Progra-II-TP\\Medilink\\Medilink.csproj": {}
+    "C:\\Users\\saids\\Desktop\\Tp Progra II\\Progra-II-TP\\Medilink\\Medilink.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Matt\\OneDrive - uap.edu.ar\\Programacion I\\Tp APIS II\\Progra-II-TP\\Medilink\\Medilink.csproj": {
+    "C:\\Users\\saids\\Desktop\\Tp Progra II\\Progra-II-TP\\Medilink\\Medilink.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Matt\\OneDrive - uap.edu.ar\\Programacion I\\Tp APIS II\\Progra-II-TP\\Medilink\\Medilink.csproj",
+        "projectUniqueName": "C:\\Users\\saids\\Desktop\\Tp Progra II\\Progra-II-TP\\Medilink\\Medilink.csproj",
         "projectName": "Medilink",
-        "projectPath": "C:\\Users\\Matt\\OneDrive - uap.edu.ar\\Programacion I\\Tp APIS II\\Progra-II-TP\\Medilink\\Medilink.csproj",
-        "packagesPath": "C:\\Users\\Matt\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Matt\\OneDrive - uap.edu.ar\\Programacion I\\Tp APIS II\\Progra-II-TP\\Medilink\\obj\\",
+        "projectPath": "C:\\Users\\saids\\Desktop\\Tp Progra II\\Progra-II-TP\\Medilink\\Medilink.csproj",
+        "packagesPath": "C:\\Users\\saids\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\saids\\Desktop\\Tp Progra II\\Progra-II-TP\\Medilink\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Matt\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\saids\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -88,7 +94,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

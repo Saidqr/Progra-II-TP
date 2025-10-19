@@ -1,5 +1,4 @@
 using Medilink.Models;
-
 namespace Medilink.Interfaces;
 public interface IHospitalService
 {
