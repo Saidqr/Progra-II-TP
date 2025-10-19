@@ -1,6 +1,7 @@
 using System.Runtime.Versioning;
 using Medilink.Models;
 using Medilink.Services;
+using Medilink.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Medilink.Controllers;
@@ -11,6 +12,9 @@ namespace Medilink.Controllers;
 public class MedicamentoController : ControllerBase
 {
     private readonly IMedicamentoService _medicamentoService;
+
+    public int Id { get; private set; }
+
     public MedicamentoController(IMedicamentoService medicamentoService)
     {
         _medicamentoService = medicamentoService;
@@ -35,7 +39,7 @@ public class MedicamentoController : ControllerBase
     public async Task<ActionResult<Medicamento>> Create([FromBody] Medicamento medicamento)
     {
         var nuevoMedicamento = await _medicamentoService.AddMedicamento(medicamento);
-        return CreatedAction(nameof(GetOneById), new { id = nuevoMedicamento.Id }, nuevoMedicamento);
+        return CreatedAtAction(nameof(GetOneById), new { id = nuevoMedicamento.Id }, nuevoMedicamento);
     }
 
     [HttpPut("{id}")]
