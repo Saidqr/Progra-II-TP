@@ -43,7 +43,7 @@ public class MedicamentoController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> CompleteUpdate([FromBody] MedicamentoController medicamento, int id)
+    public async Task<IActionResult> CompleteUpdate([FromBody] Medicamento medicamento, int id)
     {
         if (id != medicamento.Id) return BadRequest();
         var resultado = await _medicamentoService.UpdateMedicamento(medicamento);
