@@ -7,7 +7,6 @@ namespace Medilink.Models
         public string Apellido { get; set; }
         public string DNI { get; set; }
         public DateTime fechaNacimiento { get; set; }
-        public int IdRol { get; set; }
-        public Rol Rol { get; set; }
+        public List<Rol> Roles { get; set; }
     }
 }

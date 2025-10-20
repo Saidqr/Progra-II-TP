@@ -1,3 +1,4 @@
+using System.Reflection.Metadata;
 using Medilink.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,13 +24,17 @@ namespace Medilink.Context
             modelBuilder.Entity<Persona>(entity =>
             {
                 entity.HasKey(p => p.Id);
-                entity.HasOne(p => p.Rol).WithMany().HasForeignKey(p => p.IdRol).OnDelete(DeleteBehavior.Restrict);
-            });
 
+                entity.Property(p => p.Nombre).IsRequired();
+                entity.Property(p => p.Apellido).IsRequired();
+                entity.Property(p => p.DNI).IsRequired();
+                entity.Property(p => p.fechaNacimiento).IsRequired();
+
+                entity.HasMany(p => p.Roles).WithMany().UsingEntity<Dictionary<string, object>>("PersonaRol", j => j.HasOne<Rol>().WithMany().HasForeignKey("RolId").OnDelete(DeleteBehavior.Restrict), j => j.HasOne<Persona>().WithMany().HasForeignKey("PersonaId").OnDelete(DeleteBehavior.Restrict));
+            });
+ 
 
             modelBuilder.Entity<Rol>().ToTable("Roles");
-
-
             modelBuilder.Entity<Medico>(entity =>
             {
                 entity.ToTable("Medicos");
@@ -40,17 +45,18 @@ namespace Medilink.Context
 
                 entity.HasIndex(e => e.Matricula).IsUnique();
             });
+            modelBuilder.Entity<Paciente>(entity =>
+            {
+                entity.ToTable("Pacientes");
+                entity.Property(p => p.Expediente).IsRequired();
+            });
 
             modelBuilder.Entity<ConsultaMedica>().HasKey(e => e.Id);
             modelBuilder.Entity<ConsultaMedica>().HasOne(c => c.Medico).WithMany(m => m.Consultas).HasForeignKey(c => c.IdMedico).OnDelete(DeleteBehavior.Restrict);
-            //Falta añadir paciente 
+            modelBuilder.Entity<ConsultaMedica>().HasOne(c => c.Paciente).WithMany(m => m.Consultas).HasForeignKey(c => c.IdPaciente).OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<ConsultaMedica>().Property(c => c.Estado).IsRequired();
             modelBuilder.Entity<ConsultaMedica>().Property(c => c.Observaciones).HasMaxLength(100);
             modelBuilder.Entity<ConsultaMedica>().Property(c => c.Fecha).IsRequired();
-
-            modelBuilder.Entity<Hospital>().HasKey(h => h.Id);
-            modelBuilder.Entity<Hospital>().Property(h => h.Nombre).IsRequired();
-            modelBuilder.Entity<Hospital>().HasMany(h => h.Medicos).WithMany(h => h.Hospitales);
 
             modelBuilder.Entity<Medicamento>().HasKey(m => m.Id);
             modelBuilder.Entity<Medicamento>().Property(m => m.Nombre).IsRequired();
