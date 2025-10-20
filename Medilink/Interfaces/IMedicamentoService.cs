@@ -9,6 +9,6 @@ namespace Medilink.Interfaces
         Task<Medicamento> AddMedicamento(Medicamento medicamento);
         Task<bool> UpdateMedicamento(Medicamento medicamento);
         Task<bool> DeleteMedicamento(int id);
-        Task<bool> UpdateMedicamento(MedicamentoController medicamento);
+        //Task<bool> UpdateMedicamento(MedicamentoController medicamento);
     }
 }
