@@ -13,7 +13,6 @@ namespace Medilink.Context
 
         public DbSet<Medico> Medicos { get; set; }
         public DbSet<ConsultaMedica> Consultas { get; set; }
-        public DbSet<Hospital> Hospitales { get; set; }
         public DbSet<Medicamento> Medicamentos { get; set; }
         public DbSet<Persona> Personas { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
