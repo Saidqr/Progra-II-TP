@@ -8,7 +8,7 @@ namespace Medilink.Models
         public string Estado { get; set; }
         public string Observaciones { get; set; }
         public Medico Medico { get; set; }
-        public Paciente paciente {get; set;}
+        public Paciente Paciente {get; set;}
         public DateTime Fecha { get; set; }
         
 
