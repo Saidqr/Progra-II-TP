@@ -29,9 +29,9 @@ public class RecetaController : ControllerBase
         return Ok(receta);
     }
     [HttpPost]
-    public async Task<ActionResult<Receta>> Create([FromBody] Receta receta)
+    public async Task<ActionResult<Receta>> Create([FromBody] Receta receta, int idConsulta)
     {
-        var nuevaReceta = await _recetaService.AddReceta(receta);
+        var nuevaReceta = await _recetaService.AddReceta(receta,idConsulta);
         return CreatedAtAction(nameof(GetOneById), new { id = nuevaReceta.Id }, nuevaReceta);
     }
 

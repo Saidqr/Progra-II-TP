@@ -6,7 +6,7 @@ namespace Medilink.Interfaces
     {
         public Task<IEnumerable<Receta>> GetRecetas();
         public Task<Receta> GetReceta(int id);
-        public Task<Receta> AddReceta(Receta receta);
+        public Task<Receta> AddReceta(Receta receta,int idConsulta);
         public Task<bool> UpdateReceta(Receta receta);
         public Task<bool> DeleteReceta(int id);
     }

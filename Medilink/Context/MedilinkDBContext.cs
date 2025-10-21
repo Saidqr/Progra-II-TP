@@ -12,9 +12,12 @@ namespace Medilink.Context
         }
 
         public DbSet<Medico> Medicos { get; set; }
+        public DbSet<Paciente> Pacientes { get; set; }
         public DbSet<ConsultaMedica> Consultas { get; set; }
         public DbSet<Medicamento> Medicamentos { get; set; }
         public DbSet<Persona> Personas { get; set; }
+        public DbSet<Receta> Recetas{ get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -31,7 +34,7 @@ namespace Medilink.Context
 
                 entity.HasMany(p => p.Roles).WithMany().UsingEntity<Dictionary<string, object>>("PersonaRol", j => j.HasOne<Rol>().WithMany().HasForeignKey("RolId").OnDelete(DeleteBehavior.Restrict), j => j.HasOne<Persona>().WithMany().HasForeignKey("PersonaId").OnDelete(DeleteBehavior.Restrict));
             });
- 
+
 
             modelBuilder.Entity<Rol>().ToTable("Roles");
             modelBuilder.Entity<Medico>(entity =>
@@ -62,7 +65,7 @@ namespace Medilink.Context
             modelBuilder.Entity<Medicamento>().Property(m => m.Descripcion).IsRequired();
             modelBuilder.Entity<Medicamento>().Property(m => m.FechaFabricacion).IsRequired().HasMaxLength(12);
             modelBuilder.Entity<Medicamento>().Property(m => m.FechaVencimiento).IsRequired().HasMaxLength(12);
-        
+
 
         }
     }
