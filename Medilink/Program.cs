@@ -99,6 +99,8 @@ builder.Services.AddScoped<IConsultaMedicaService, ConsultaMedicaService>();
 builder.Services.AddScoped<IMedicoService,MedicoService>();
 builder.Services.AddScoped<IMedicamentoService, MedicamentoService>();
 builder.Services.AddScoped<IRecetaService, RecetaService>();
+builder.Services.AddScoped<IPersonaService, PersonaService>();
+builder.Services.AddScoped<IAuthService,AuthService>();
 
 builder.Services.AddEndpointsApiExplorer();
 var app = builder.Build();
