@@ -9,6 +9,7 @@ using Medilink.DTO;
 namespace Medilink.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/[controller]")]
 public class PersonasController : ControllerBase
 {

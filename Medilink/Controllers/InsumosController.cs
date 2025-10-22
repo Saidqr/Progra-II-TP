@@ -3,10 +3,12 @@ using Medilink.Models;
 using Medilink.Services;
 using Medilink.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Medilink.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/[controller]")]
 
 public class InsumoController : ControllerBase

@@ -10,6 +10,7 @@ using System.Text;
 using DotNetEnv;
 using Microsoft.OpenApi.Models;
 
+
 Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
@@ -100,7 +101,8 @@ builder.Services.AddScoped<IMedicoService,MedicoService>();
 builder.Services.AddScoped<IMedicamentoService, MedicamentoService>();
 builder.Services.AddScoped<IRecetaService, RecetaService>();
 builder.Services.AddScoped<IPersonaService, PersonaService>();
-builder.Services.AddScoped<IAuthService,AuthService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+
 
 builder.Services.AddEndpointsApiExplorer();
 var app = builder.Build();
@@ -113,6 +115,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+Console.WriteLine(BCrypt.Net.BCrypt.HashPassword("1234"));
 
 app.UseAuthentication();
 app.UseAuthorization();

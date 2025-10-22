@@ -6,6 +6,6 @@ namespace Medilink.Models
         public int Estado { get; set; }
         public DateTime FechaVencimiento { get; set; }
         public ConsultaMedica Consulta { get; set; }
-        public List<(Medicamento, int)> Medicamentos { get; set; }     
+        //public List<(Medicamento, int)> Medicamentos { get; set; }     
     }
 }
