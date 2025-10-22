@@ -3,10 +3,12 @@ namespace Medilink.Models
     public class Persona 
     {
         public int Id { get; set; }
-        public string Nombre { get; set; }
-        public string Apellido { get; set; }
-        public string DNI { get; set; }
-        public DateTime fechaNacimiento { get; set; }
+        public required string Nombre { get; set; }
+        public required string Apellido { get; set; }
+        public required string NombreUsuario { get; set; }
+        public required string PassHash { get; set; }
+        public required string DNI { get; set; }
+        public required DateTime fechaNacimiento { get; set; }
         public List<Rol> Roles { get; set; }
     }
 }

@@ -47,7 +47,7 @@ namespace Medilink.Services
         {
             var recetaAeliminar = await GetReceta(id);
             if (recetaAeliminar == null) return false;
-            _dbContext.Remove(id);
+            _dbContext.Recetas.Remove(recetaAeliminar);
             await _dbContext.SaveChangesAsync();
             return true;
         }
