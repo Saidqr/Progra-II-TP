@@ -2,6 +2,7 @@ using Medilink.Context;
 using Medilink.Interfaces;
 using Medilink.Models;
 using Microsoft.EntityFrameworkCore;
+using Medilink.DTO;
 namespace Medilink.Services;
 
 public class PersonaService : IPersonaService
@@ -11,11 +12,31 @@ public class PersonaService : IPersonaService
     {
         _dbContext = dbContext;
     }
-    public async Task<Persona> AddPersonaAsync(Persona persona)
+    public async Task<Persona> AddPersonaAsync(RegistrarPersonaDto dto)
     {
-            await _dbContext.Personas.AddAsync(persona);
-            await _dbContext.SaveChangesAsync();
-            return persona;
+        var passHash = BCrypt.Net.BCrypt.HashPassword(dto.Contrasenia);
+
+        // Buscar los roles que coincidan con los IDs recibidos
+        var roles = await _dbContext.Roles.Where(r => dto.IdRoles.Contains(r.Id)).ToListAsync();
+        //Esto esta bien ?? Pq no dejaria que se inserte ninguna persona si no tenia un rol creado previamenteÇ
+        if (!roles.Any())
+            return null;
+
+        var persona = new Persona
+        {
+        Nombre = dto.Nombre,
+        NombreUsuario = dto.NombreUsuario,
+        PassHash = passHash,
+        Apellido = dto.Apellido,
+        fechaNacimiento = dto.fechaNacimiento,
+        DNI = dto.DNI,
+        Roles = roles
+        };
+
+        await _dbContext.Personas.AddAsync(persona);
+        await _dbContext.SaveChangesAsync();
+
+        return persona;
     }
 
     public async Task<bool> DeletePersonaAsync(int id)
@@ -30,17 +51,16 @@ public class PersonaService : IPersonaService
 
     public async Task<Persona> GetByNombreUsuario(string nombreUsuario)
     {
-        return _dbContext.Personas.FirstOrDefault(p => p.NombreUsuario == nombreUsuario);
+        return _dbContext.Personas.Include(p => p.Roles).FirstOrDefault(p => p.NombreUsuario == nombreUsuario);
     }
 
     public async Task<Persona> GetPersonaAsync(int id)
     {
-        return await _dbContext.Personas.FindAsync(id);
+        return await _dbContext.Personas.Include(p => p.Roles).FirstOrDefaultAsync(p => p.Id == id);
     }
-
     public async Task<IEnumerable<Persona>> GetPersonasAsync()
     {
-        return await _dbContext.Personas.ToListAsync();
+        return await _dbContext.Personas.Include(p => p.Roles).ToListAsync();
     }
 
     public async Task<bool> UpdatePersonaAsync(Persona persona)

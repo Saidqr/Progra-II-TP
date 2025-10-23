@@ -16,7 +16,8 @@ namespace Medilink.Context
         public DbSet<ConsultaMedica> Consultas { get; set; }
         public DbSet<Medicamento> Medicamentos { get; set; }
         public DbSet<Persona> Personas { get; set; }
-        public DbSet<Receta> Recetas{ get; set; }
+        public DbSet<Receta> Recetas { get; set; }
+        public DbSet<Rol> Roles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace Medilink.Models
 {
     public class ConsultaMedica
@@ -7,11 +9,11 @@ namespace Medilink.Models
         public int IdPaciente { get; set; }
         public string Estado { get; set; }
         public string Observaciones { get; set; }
+        [JsonIgnore]
         public Medico Medico { get; set; }
+        [JsonIgnore]
         public Paciente Paciente {get; set;}
         public DateTime Fecha { get; set; }
-        
-
     }
 
 }

@@ -21,7 +21,7 @@ public class PersonasController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Roles = "ApiUser,Admin")] // Permite tanto usuarios API como admins
+    //[Authorize(Roles = "ApiUser,Admin")] // Permite tanto usuarios API como admins
     public async Task<ActionResult<List<PersonaDto>>> GetAll()
     {
         //Imprimir todas las claims en un for each
@@ -31,7 +31,7 @@ public class PersonasController : ControllerBase
         }
 
         var personas = await _personaService.GetPersonasAsync();
-        var personasDto = personas.Select(p => new PersonaDto(p.Nombre, p.NombreUsuario, p.Apellido, p.fechaNacimiento, p.DNI)).ToList();
+        var personasDto = personas.Select(p => new PersonaDto(p.Nombre, p.NombreUsuario, p.Apellido, p.fechaNacimiento, p.DNI,p.Roles)).ToList();
         return Ok(personasDto);
     }
 
@@ -47,17 +47,10 @@ public class PersonasController : ControllerBase
     public async Task<ActionResult<PersonaDto>> Registrar([FromBody] RegistrarPersonaDto personaDto)
     {
         var passHash = BCrypt.Net.BCrypt.HashPassword(personaDto.Contrasenia);
-        var persona = new Persona
-        {
-            Nombre = personaDto.Nombre,
-            NombreUsuario = personaDto.NombreUsuario,
-            PassHash = passHash,
-            Apellido = personaDto.Apellido,
-            fechaNacimiento=personaDto.fechaNacimiento,
-            DNI = personaDto.DNI,
-        };
-        persona = await _personaService.AddPersonaAsync(persona);
-        return CreatedAtAction(nameof(GetByID), new { id = persona.Id }, new PersonaDto(persona.Nombre, persona.NombreUsuario, persona.Apellido, persona.fechaNacimiento, persona.DNI));
+        var persona = await _personaService.AddPersonaAsync(personaDto);
+        if (persona == null) return BadRequest("Error al registrar la persona.");
+
+        return CreatedAtAction(nameof(GetByID), new { id = persona.Id }, new PersonaDto(persona.Nombre, persona.NombreUsuario, persona.Apellido, persona.fechaNacimiento, persona.DNI,persona.Roles));
     }
 
     [HttpDelete("{id}")]
