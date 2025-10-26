@@ -46,7 +46,6 @@ public class PersonasController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<PersonaDto>> Registrar([FromBody] RegistrarPersonaDto personaDto)
     {
-        var passHash = BCrypt.Net.BCrypt.HashPassword(personaDto.Contrasenia);
         var persona = await _personaService.AddPersonaAsync(personaDto);
         if (persona == null) return BadRequest("Error al registrar la persona.");
 
