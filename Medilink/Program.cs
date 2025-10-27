@@ -118,7 +118,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 Console.WriteLine(BCrypt.Net.BCrypt.HashPassword("1234"));
-
+app.UseMiddleware<Medilink.Middleware.ApiKeyMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 
