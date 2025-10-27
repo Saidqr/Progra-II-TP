@@ -25,6 +25,13 @@ namespace Medilink.Services
 
         public async Task<Medicamento> AddMedicamento(Medicamento medicamento)
         {
+            var medInventario = await GetMedicamento(medicamento.Id);
+            if (medInventario != null)
+            {
+                medInventario.cantidadInventario +=medicamento.cantidadInventario;
+                await _context.SaveChangesAsync();
+                return medInventario;
+            }
             _context.Medicamentos.Add(medicamento);
             await _context.SaveChangesAsync();
             return medicamento;
@@ -59,6 +66,16 @@ namespace Medilink.Services
             await _context.SaveChangesAsync();
             return true;
         }
+        public async Task<bool> RestarCantidad(int id, int cantidad)
+        {
+            var medicamento = await GetMedicamento(id);
+            if (medicamento == null || cantidad <= 0 || medicamento.cantidadInventario < cantidad)
+            return false;
+            medicamento.cantidadInventario -= cantidad;
+            await UpdateMedicamento(medicamento);
+            return true;
+        }
+
     }
 }
 

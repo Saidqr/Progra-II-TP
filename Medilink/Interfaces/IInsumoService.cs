@@ -8,6 +8,7 @@ namespace Medilink.Interfaces
         Task<Insumo> GetInsumo(int id);
         Task<Insumo> AddInsumo(Insumo insumo);
         Task<bool> UpdateInsumo(Insumo insumo);
+        Task<bool> RestarCantidad(int id, int cantidad);
         Task<bool> DeleteInsumo(int id);
     }
 }

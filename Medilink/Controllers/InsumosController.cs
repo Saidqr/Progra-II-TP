@@ -51,10 +51,20 @@ public class InsumoController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
         var insumo = await _insumoService.DeleteInsumo(id);
         if (!insumo) return NotFound($"No se encontró el insumo con ID {id}");
         else return NoContent();
+    }
+    [HttpPatch("{id}/restar")]
+    public async Task<IActionResult> RestarCantidad(int id, [FromQuery] int cantidad)
+    {
+        var resultado = await _insumoService.RestarCantidad(id, cantidad);
+
+        if (!resultado)
+            return NotFound($"No se encontró el insumo con ID {id} o la cantidad a restar es inválida.");
+
+        return Ok($"Se restaron {cantidad} unidades del insumo con ID {id}.");
     }
 }

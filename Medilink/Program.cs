@@ -96,6 +96,7 @@ builder.Services.AddSwaggerGen(c =>
         } });
 });
 
+
 builder.Services.AddScoped<IConsultaMedicaService, ConsultaMedicaService>();
 builder.Services.AddScoped<IMedicoService,MedicoService>();
 builder.Services.AddScoped<IMedicamentoService, MedicamentoService>();
