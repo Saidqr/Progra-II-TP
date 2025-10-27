@@ -9457,19 +9457,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Matt\\.nuget\\packages\\": {}
+    "C:\\Users\\Maira\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Matt\\OneDrive - uap.edu.ar\\Programacion I\\Progra-II-TP\\Medilink\\Medilink.csproj",
+      "projectUniqueName": "C:\\Users\\Maira\\Desktop\\Progra-II-TP\\Medilink\\Medilink.csproj",
       "projectName": "Medilink",
-      "projectPath": "C:\\Users\\Matt\\OneDrive - uap.edu.ar\\Programacion I\\Progra-II-TP\\Medilink\\Medilink.csproj",
-      "packagesPath": "C:\\Users\\Matt\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Matt\\OneDrive - uap.edu.ar\\Programacion I\\Progra-II-TP\\Medilink\\obj\\",
+      "projectPath": "C:\\Users\\Maira\\Desktop\\Progra-II-TP\\Medilink\\Medilink.csproj",
+      "packagesPath": "C:\\Users\\Maira\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Maira\\Desktop\\Progra-II-TP\\Medilink\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Matt\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\Maira\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
@@ -9559,7 +9559,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

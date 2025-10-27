@@ -1,15 +1,18 @@
 using Medilink.Context;
 using Medilink.Interfaces;
 using Medilink.Models;
+using Medilink.Services;
 using Microsoft.EntityFrameworkCore;
 namespace Medilink.Services
 {
     public class RecetaService : IRecetaService
     {
         private readonly MedilinkDbContext _dbContext;
-        public RecetaService(MedilinkDbContext dbContext)
+        private readonly IMedicamentoService _medService;
+        public RecetaService(MedilinkDbContext dbContext, IMedicamentoService medService)
         {
             _dbContext = dbContext;
+            _medService = medService;
         }
         
         public async Task<IEnumerable<Receta>> GetRecetas()
@@ -20,7 +23,6 @@ namespace Medilink.Services
         {
             return await _dbContext.Recetas.FindAsync(id);
         }
-
         public async Task<Receta> AddReceta(Receta receta, int idConsulta)
         {
             var consulta = await _dbContext.Consultas.FindAsync(idConsulta);
@@ -31,7 +33,6 @@ namespace Medilink.Services
             await _dbContext.SaveChangesAsync();
             return receta;
         }
-
         public async Task<bool> UpdateReceta(Receta receta)
         {
             var recetaModificada = await GetReceta(receta.Id);
@@ -42,7 +43,6 @@ namespace Medilink.Services
             await _dbContext.SaveChangesAsync();
             return true;
         }
-
         public async Task<bool> DeleteReceta(int id)
         {
             var recetaAeliminar = await GetReceta(id);
@@ -50,6 +50,23 @@ namespace Medilink.Services
             _dbContext.Recetas.Remove(recetaAeliminar);
             await _dbContext.SaveChangesAsync();
             return true;
+        }
+        public async Task<bool> AgregarMedicamento(int idReceta,int  idMed, int cantidad)
+        {
+            var receta = await GetReceta(idReceta);
+            var med = await _medService.GetMedicamento(idMed);
+            if (receta == null || receta.Estado != 0 || med == null || cantidad <=0) return false;
+            var recetaMed =new RecetaMedicamento
+            {
+                IdReceta = receta.Id,
+                medicamento = med,
+                Cantidad =cantidad
+            };
+            receta.RecetaMedicamentos.Add(recetaMed);
+
+            await _dbContext.SaveChangesAsync();
+            return true;
+
         }
     }
 }
