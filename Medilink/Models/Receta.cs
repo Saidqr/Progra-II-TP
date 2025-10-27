@@ -5,8 +5,6 @@ namespace Medilink.Models
         public int Id { get; set; }
         public int Estado { get; set; }
         public DateTime FechaVencimiento { get; set; }
-        public int IdConsulta { get; set; }
-        public ConsultaMedica Consulta {get;set;}
         public ICollection<RecetaMedicamento> RecetaMedicamentos { get; set; }
     }
     

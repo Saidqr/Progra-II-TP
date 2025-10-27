@@ -14,6 +14,8 @@ namespace Medilink.Models
         [JsonIgnore]
         public Paciente Paciente {get; set;}
         public DateTime Fecha { get; set; }
+        public int IdReceta { get; set; }
+        public Receta Receta { get; set; }
     }
 
 }

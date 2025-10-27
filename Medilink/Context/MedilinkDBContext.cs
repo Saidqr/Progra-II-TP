@@ -134,6 +134,11 @@ namespace Medilink.Context
                     .WithMany(p => p.Consultas)
                     .HasForeignKey(c => c.IdPaciente)
                     .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(c => c.Receta)
+                    .WithOne()
+                    .HasForeignKey<ConsultaMedica>(c => c.IdReceta)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             //modelBuilder.Entity<ConsultaMedica>().HasKey(e => e.Id);
@@ -156,11 +161,6 @@ namespace Medilink.Context
                 entity.Property(r => r.FechaVencimiento)
                     .IsRequired();
                 
-                // Relación con ConsultaMedica (asumiendo que es uno a uno o muchos a uno)
-                entity.HasOne(r => r.Consulta)
-                    .WithOne() // o .WithOne() si es 1:1
-                    .HasForeignKey("IdConsulta") // Necesitas agregar esta propiedad en el modelo
-                    .OnDelete(DeleteBehavior.Restrict);
                 
                 // Relación con RecetaMedicamentos
                 entity.HasMany(r => r.RecetaMedicamentos)
