@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace Medilink.Controllers;
 
 [ApiController]
-[Authorize]
+// [Authorize]
 [Route("api/[controller]")]
 
 public class InsumoController : ControllerBase

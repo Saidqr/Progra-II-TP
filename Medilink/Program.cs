@@ -2,6 +2,7 @@ using Medilink.Context;
 using Medilink.Interfaces;
 using Medilink.Services;
 using Medilink.Models;
+using Medilink.Middleware;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -52,48 +53,48 @@ builder.Services.AddSwaggerGen(c =>
         Version = "v1",
         Description = "API para gestión de consultas médicas y médicos."
     });
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        Scheme = "Bearer",
-        BearerFormat = "JWT",
-        In = ParameterLocation.Header,
-        Description = "Introduce el token JWT en este formato: Bearer {token}"
-    });
+    // c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    // {
+    //     Name = "Authorization",
+    //     Type = SecuritySchemeType.Http,
+    //     Scheme = "Bearer",
+    //     BearerFormat = "JWT",
+    //     In = ParameterLocation.Header,
+    //     Description = "Introduce el token JWT en este formato: Bearer {token}"
+    // });
 
     // Configuración de seguridad para API Key
-    c.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
-    {
-        Name = "X-API-KEY",
-        Type = SecuritySchemeType.ApiKey,
-        In = ParameterLocation.Header,
-        Description = "Introduce la API Key para autenticación entre servicios"
-    });
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            new string[] {}
-        },
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "ApiKey"
-                }
-            },
-            new string[] {}
-        } });
+    // c.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
+    // {
+    //     Name = "X-API-KEY",
+    //     Type = SecuritySchemeType.ApiKey,
+    //     In = ParameterLocation.Header,
+    //     Description = "Introduce la API Key para autenticación entre servicios"
+    // });
+    // c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    // {
+    //     {
+    //         new OpenApiSecurityScheme
+    //         {
+    //             Reference = new OpenApiReference
+    //             {
+    //                 Type = ReferenceType.SecurityScheme,
+    //                 Id = "Bearer"
+    //             }
+    //         },
+    //         new string[] {}
+    //     },
+    //     {
+    //         new OpenApiSecurityScheme
+    //         {
+    //             Reference = new OpenApiReference
+    //             {
+    //                 Type = ReferenceType.SecurityScheme,
+    //                 Id = "ApiKey"
+    //             }
+    //         },
+    //         new string[] {}
+    //     } });
 });
 
 
@@ -103,6 +104,8 @@ builder.Services.AddScoped<IMedicamentoService, MedicamentoService>();
 builder.Services.AddScoped<IRecetaService, RecetaService>();
 builder.Services.AddScoped<IPersonaService, PersonaService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IPacienteService, PacienteService>();
+builder.Services.AddScoped<IInsumoService, InsumoService>();
 
 
 builder.Services.AddEndpointsApiExplorer();
@@ -117,10 +120,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-Console.WriteLine(BCrypt.Net.BCrypt.HashPassword("1234"));
-app.UseMiddleware<Medilink.Middleware.ApiKeyMiddleware>();
-app.UseAuthentication();
-app.UseAuthorization();
+// Console.WriteLine(BCrypt.Net.BCrypt.HashPassword("1234"));
+// app.UseMiddleware<Medilink.Middleware.ApiKeyMiddleware>();
+// app.UseAuthentication();
+// app.UseAuthorization();
 
 app.MapControllers();
 

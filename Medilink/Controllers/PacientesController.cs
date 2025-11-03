@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace Medilink.Controllers;
 
 [ApiController]
-[Authorize]
+// [Authorize]
 [Route("api/[controller]")]
 public class PacientesController : ControllerBase
 {
@@ -23,6 +23,7 @@ public class PacientesController : ControllerBase
         var pacientes = await _pacienteService.GetPacientes();
         return Ok(pacientes);
     }
+    
     [HttpGet("{id}")]
     public async Task<ActionResult<Paciente>> GetOneById(int id)
     {
