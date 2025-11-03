@@ -16,23 +16,19 @@ public class PersonaService : IPersonaService
     {
         var passHash = BCrypt.Net.BCrypt.HashPassword(dto.Contrasenia);
 
-        // Buscar los roles que coincidan con los IDs recibidos
         var roles = await _dbContext.Roles.Where(r => dto.IdRoles.Contains(r.Id)).ToListAsync();
-        //Esto esta bien ?? Pq no dejaria que se inserte ninguna persona si no tenia un rol creado previamenteÇ
-        if (!roles.Any())
-            return null;
 
         var persona = new Persona
         {
-        Nombre = dto.Nombre,
-        NombreUsuario = dto.NombreUsuario,
-        PassHash = passHash,
-        Apellido = dto.Apellido,
-        fechaNacimiento = dto.fechaNacimiento,
-        DNI = dto.DNI,
-        Roles = roles
+            Nombre = dto.Nombre,
+            NombreUsuario = dto.NombreUsuario,
+            PassHash = passHash,
+            Apellido = dto.Apellido,
+            fechaNacimiento = dto.fechaNacimiento,
+            DNI = dto.DNI,
+            Roles = roles
         };
-
+        
         await _dbContext.Personas.AddAsync(persona);
         await _dbContext.SaveChangesAsync();
 

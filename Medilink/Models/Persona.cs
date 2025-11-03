@@ -9,6 +9,6 @@ namespace Medilink.Models
         public required string PassHash { get; set; }
         public required string DNI { get; set; }
         public required DateTime fechaNacimiento { get; set; }
-        public List<Rol> Roles { get; set; }
+        public List<Rol>? Roles { get; set; }
     }
 }

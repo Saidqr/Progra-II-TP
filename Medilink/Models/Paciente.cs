@@ -4,6 +4,6 @@ namespace Medilink.Models
     {
         public string Expediente { get; set; }
         public List<ConsultaMedica> Consultas { get; set; }
-        //Ehhhhh
+
     }
 }

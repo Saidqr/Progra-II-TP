@@ -47,11 +47,11 @@ namespace Medilink.Context
                     "PersonaRol",j => j.HasOne<Rol>()
                             .WithMany()
                             .HasForeignKey("RolId")
-                            .OnDelete(DeleteBehavior.Cascade),
+                            .OnDelete(DeleteBehavior.Restrict),
                     j => j.HasOne<Persona>()
                             .WithMany()
                             .HasForeignKey("PersonaId")
-                            .OnDelete(DeleteBehavior.Cascade),
+                            .OnDelete(DeleteBehavior.Restrict),
                     j =>
                     {
                         j.HasKey("PersonaId", "RolId");
