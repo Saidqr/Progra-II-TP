@@ -24,18 +24,38 @@ namespace Medilink.Services
             return await _dbContext.Recetas.FindAsync(id);
         }
         public async Task<Receta> AddReceta(Receta receta, int idConsulta)
-        {
-            var consulta = await _dbContext.Consultas.FindAsync(idConsulta);
+{
+    var consulta = await _dbContext.Consultas.FindAsync(idConsulta);
+    if (consulta == null)
+        throw new InvalidOperationException($"No se encontró una consulta médica con ID {idConsulta}.");
 
-            if (consulta == null) throw new InvalidOperationException($"No se encontró una consulta médica con ID {idConsulta}.");
-            
-            await _dbContext.Recetas.AddAsync(receta);
-            await _dbContext.SaveChangesAsync();
-            consulta.IdReceta = receta.Id;
-            consulta.Receta = receta;
-            await _dbContext.SaveChangesAsync();
-            return receta;
+    // Opcional: validar que RecetaMedicamentos no sea null
+    if (receta.RecetaMedicamentos != null)
+    {
+        foreach (var recetaMed in receta.RecetaMedicamentos)
+        {
+            // Cargar el medicamento existente para asignarlo y evitar inserciones duplicadas
+            var medicamentoExistente = await _dbContext.Medicamentos.FindAsync(recetaMed.IdMedicamento);
+            if (medicamentoExistente == null)
+                throw new InvalidOperationException($"No se encontró medicamento con ID {recetaMed.IdMedicamento}.");
+
+            recetaMed.Medicamento = medicamentoExistente;
+            // Asegúrate de que IdReceta está correcto o déjalo que EF lo maneje
         }
+    }
+
+    // Agregar receta con sus medicamentos ya cargados
+    await _dbContext.Recetas.AddAsync(receta);
+    await _dbContext.SaveChangesAsync();
+
+    consulta.IdReceta = receta.Id;
+    consulta.Receta = receta;
+
+    await _dbContext.SaveChangesAsync();
+
+    return receta;
+}
+
         public async Task<bool> UpdateReceta(Receta receta)
         {
             var recetaModificada = await GetReceta(receta.Id);
@@ -54,22 +74,34 @@ namespace Medilink.Services
             await _dbContext.SaveChangesAsync();
             return true;
         }
-        public async Task<bool> AgregarMedicamento(int idReceta,int  idMed, int cantidad)
+        public async Task<bool> AgregarMedicamento(int idReceta, int idMed, int cantidad)
         {
-            var receta = await GetReceta(idReceta);
-            var med = await _medService.GetMedicamento(idMed);
-            if (receta == null || receta.Estado != 0 || med == null || cantidad <=0) return false;
-            var recetaMed =new RecetaMedicamento
-            {
-                IdReceta = receta.Id,
-                medicamento = med,
-                Cantidad =cantidad
-            };
-            receta.RecetaMedicamentos.Add(recetaMed);
+            return false;
+    var receta = await _dbContext.Recetas
+        .Include(r => r.RecetaMedicamentos)
+        .FirstOrDefaultAsync(r => r.Id == idReceta);
+    if (receta == null || receta.Estado != 0 || cantidad <= 0)
+        return false;
 
-            await _dbContext.SaveChangesAsync();
-            return true;
+        var medExistente = await _dbContext.Medicamentos.FindAsync(idMed);
+            
+    if (medExistente == null)
+        return false;
+
+    var recetaMed = new RecetaMedicamento
+    {
+        IdReceta = receta.Id,
+        IdMedicamento = medExistente.Id,  // Asegúrate de poner el id correcto
+        Medicamento = medExistente,       // Asignas el medicamento cargado
+        Cantidad = cantidad
+    };
+
+    receta.RecetaMedicamentos.Add(recetaMed);
+
+    await _dbContext.SaveChangesAsync();
+    return true;
+}
+
 
         }
     }
-}
