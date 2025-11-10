@@ -1,4 +1,6 @@
+using Medilink.Models;
 namespace Medilink.DTO;
+
 public record RecetaEnvioDto(
     string Token,
     DateTime Timestamp,
@@ -31,3 +33,8 @@ public record MedicamentoRecetaDto(
     int Cantidad,
     string Descripcion
 );
+public class RecetaConFirmaDto
+{
+    public Receta Receta { get; set; } = null!;
+    public string Firma { get; set; } = string.Empty;
+}

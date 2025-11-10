@@ -1,6 +1,7 @@
 using Medilink.Models;
 using Medilink.Services;
 using Medilink.Interfaces;
+using Medilink.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Cryptography;
@@ -14,10 +15,13 @@ namespace Medilink.Controllers;
 [Route("api/[controller]")]
 public class RecetaController : ControllerBase
 {
+    
     private readonly IRecetaService _recetaService;
-    public RecetaController(IRecetaService recetaService)
+    private readonly FirmaDigitalService _firmaService;
+    public RecetaController(IRecetaService recetaService, FirmaDigitalService firmaService  )
     {
         _recetaService = recetaService;
+        _firmaService = firmaService;
     }
 
     [HttpGet]
@@ -34,11 +38,33 @@ public class RecetaController : ControllerBase
         return Ok(receta);
     }
     [HttpPost]
-    public async Task<ActionResult<Receta>> Create([FromBody] Receta receta, int idConsulta)
+public async Task<ActionResult<Receta>> Create([FromBody] Receta receta, int idConsulta)
+{
+    // Validar que recetaMedicamentos no sea null ni vacío
+    if (receta.RecetaMedicamentos == null || receta.RecetaMedicamentos.Count == 0)
     {
-        var nuevaReceta = await _recetaService.AddReceta(receta,idConsulta);
+        return BadRequest(new { message = "Debe enviar al menos un medicamento en la receta." });
+    }
+
+    // Opcional: limpiar ids que no deben enviarse para evitar problemas
+    foreach (var rm in receta.RecetaMedicamentos)
+    {
+        rm.Id = 0; // Si tienes Id en RecetaMedicamento que es Identity, ponerlo en 0 para que EF genere uno nuevo
+        rm.IdReceta = 0; // Igual, dejar en 0
+        rm.Medicamento = null; // Evitar insertar medicamento completo
+    }
+
+    try
+    {
+        var nuevaReceta = await _recetaService.AddReceta(receta, idConsulta);
         return CreatedAtAction(nameof(GetOneById), new { id = nuevaReceta.Id }, nuevaReceta);
     }
+    catch (Exception ex)
+    {
+        return BadRequest(new { message = ex.Message });
+    }
+}
+
 
     [HttpPut("{id}")]
     public async Task<ActionResult<Receta>> CompleteUpdate([FromBody] Receta receta, int id)
@@ -57,52 +83,38 @@ public class RecetaController : ControllerBase
         else return NoContent();
     }
     [HttpPost("validate")]
-[AllowAnonymous] // permite que la farmacia lo use sin token
-public async Task<IActionResult> ValidateExternalReceta([FromBody] JsonElement body)
+[AllowAnonymous]
+public async Task<IActionResult> ValidateExternalReceta([FromBody] RecetaConFirmaDto dto)
 {
-    // 1️⃣ Leer la firma enviada en el header
-    if (!Request.Headers.TryGetValue("X-Hospital-Signature", out var firmaRecibida))
-        return BadRequest(new { status = "error", message = "Falta la firma en el header." });
+    // Validar que se recibió la firma y la receta
+    if (dto == null || string.IsNullOrEmpty(dto.Firma) || dto.Receta == null)
+        return BadRequest(new { status = "error", message = "Falta la receta o la firma." });
 
-    // 2️⃣ Obtener el JSON exacto
-    var json = body.GetRawText();
+    // Serializar solo la receta para calcular la firma esperada (sin la firma)
+    var jsonReceta = JsonSerializer.Serialize(dto.Receta);
 
-    // 3️⃣ Calcular la firma esperada
-    var secretKey = "HOSPITAL_SECRET_KEY"; // ⚠️ Mover a configuración segura (appsettings.json o secrets)
-    using var sha = new HMACSHA256(Encoding.UTF8.GetBytes(secretKey));
-    var hash = sha.ComputeHash(Encoding.UTF8.GetBytes(json));
+    // Calcular firma esperada
+    var secretKey = "HOSPITAL_SECRET_KEY"; // Ideal: mover a configuración segura
+    using var sha = new System.Security.Cryptography.HMACSHA256(Encoding.UTF8.GetBytes(secretKey));
+    var hash = sha.ComputeHash(Encoding.UTF8.GetBytes(jsonReceta));
     var firmaEsperada = Convert.ToBase64String(hash);
 
-    // 4️⃣ Comparar firmas
-    if (firmaEsperada != firmaRecibida)
+    // Comparar firmas
+    if (firmaEsperada != dto.Firma)
         return BadRequest(new { status = "error", message = "Firma digital inválida." });
 
-    // 5️⃣ Deserializar la receta recibida
-    Receta? receta;
-    try
-    {
-        receta = JsonSerializer.Deserialize<Receta>(json);
-    }
-    catch
-    {
-        return BadRequest(new { status = "error", message = "Formato de receta inválido." });
-    }
-
-    if (receta == null || string.IsNullOrWhiteSpace(receta.CodigoReceta))
+    // Validar datos de receta
+    if (dto.Receta.Id == 0 || dto.Receta.RecetaMedicamentos == null || dto.Receta.RecetaMedicamentos.Count == 0)
         return BadRequest(new { status = "error", message = "Datos de receta incompletos." });
 
-    // 6️⃣ (Opcional) Guardar la receta validada en la base de datos
-    // Esto es útil si querés tener registro de las recetas validadas externamente
-    // await _recetaService.AddReceta(receta, idConsulta: 0); // solo si querés persistirla
-
-    // 7️⃣ Devolver OK a la farmacia
     return Ok(new
     {
         status = "ok",
         mensaje = "Receta válida y confirmada",
-        codigo = receta.CodigoReceta
+        codigo = dto.Receta.Id.ToString()
     });
 }
+
 [HttpPost("generar-firmada")]
 public async Task<IActionResult> GenerarRecetaFirmada([FromBody] Receta receta, int idConsulta)
 {

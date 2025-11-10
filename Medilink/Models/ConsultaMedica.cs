@@ -10,12 +10,13 @@ namespace Medilink.Models
         public string Estado { get; set; }
         public string Observaciones { get; set; }
         [JsonIgnore]
-        public Medico Medico { get; set; }
+        public Medico? Medico { get; set; }
         [JsonIgnore]
-        public Paciente Paciente {get; set;}
+        public Paciente? Paciente {get; set;}
         public DateTime Fecha { get; set; }
-        public int IdReceta { get; set; }
-        public Receta Receta { get; set; }
+        public int? IdReceta { get; set; }
+        [JsonIgnore]
+        public Receta? Receta { get; set; }
     }
 
 }

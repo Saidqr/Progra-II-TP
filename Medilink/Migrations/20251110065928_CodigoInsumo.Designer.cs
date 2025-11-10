@@ -4,6 +4,7 @@ using Medilink.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Medilink.Migrations
 {
     [DbContext(typeof(MedilinkDbContext))]
-    partial class MedilinkDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251110065928_CodigoInsumo")]
+    partial class CodigoInsumo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,7 +46,7 @@ namespace Medilink.Migrations
                     b.Property<int>("IdPaciente")
                         .HasColumnType("int");
 
-                    b.Property<int?>("IdReceta")
+                    b.Property<int>("IdReceta")
                         .HasColumnType("int");
 
                     b.Property<string>("Observaciones")
@@ -58,8 +61,7 @@ namespace Medilink.Migrations
                     b.HasIndex("IdPaciente");
 
                     b.HasIndex("IdReceta")
-                        .IsUnique()
-                        .HasFilter("[IdReceta] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("ConsultasMedicas", (string)null);
                 });
@@ -286,7 +288,8 @@ namespace Medilink.Migrations
                     b.HasOne("Medilink.Models.Receta", "Receta")
                         .WithOne()
                         .HasForeignKey("Medilink.Models.ConsultaMedica", "IdReceta")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Medico");
 
