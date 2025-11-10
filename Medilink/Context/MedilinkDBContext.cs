@@ -180,7 +180,7 @@ namespace Medilink.Context
                     entity.Property(rm => rm.Cantidad)
                         .IsRequired();
                     // Relación con Medicamento
-                    entity.HasOne(rm => rm.medicamento)
+                    entity.HasOne(rm => rm.Medicamento)
                         .WithMany()
                         .HasForeignKey(rm => rm.IdMedicamento)
                         .OnDelete(DeleteBehavior.Restrict); // No borrar medicamento si está en recetas

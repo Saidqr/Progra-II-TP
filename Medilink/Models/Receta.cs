@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 namespace Medilink.Models
 {
     public class Receta
@@ -12,10 +13,12 @@ namespace Medilink.Models
     public class RecetaMedicamento
     {
         public int Id { get; set; }
+        [JsonIgnore]
         public int IdReceta { get; set; }
         public int IdMedicamento { get; set; }
         [JsonIgnore]
-        public Medicamento medicamento { get; set; }
+        [ValidateNever]
+        public Medicamento Medicamento { get; set; }
         public int Cantidad { get; set; }
     }
 }

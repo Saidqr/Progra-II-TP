@@ -66,6 +66,6 @@ namespace Medilink.Services
             }
         }
 
-        public void RecetarMedicamentos(){}
+      
     }
 }
