@@ -2,13 +2,18 @@ using Medilink.Interfaces;
 using Medilink.Models;
 using Medilink.Context;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
+using System.Runtime.CompilerServices;
+
 namespace Medilink.Services
 {
     public class InsumoService : IInsumoService
     {
         private readonly MedilinkDbContext _context;
         private readonly HttpClient _httpClient;
-        public InsumoService(MedilinkDbContext context,HttpClient httpClient)
+        public InsumoService(MedilinkDbContext context, HttpClient httpClient)
         {
             _context = context;
             _httpClient = httpClient;
@@ -18,7 +23,7 @@ namespace Medilink.Services
             var insumoInventario = await GetInsumo(insumo.Id);
             if (insumoInventario != null)
             {
-                insumoInventario.cantidadInventario +=insumo.cantidadInventario;
+                insumoInventario.cantidadInventario += insumo.cantidadInventario;
                 await _context.SaveChangesAsync();
                 return insumoInventario;
             }
@@ -31,7 +36,7 @@ namespace Medilink.Services
         {
             var insumo = await GetInsumo(id);
             if (insumo == null || cantidad <= 0 || insumo.cantidadInventario < cantidad)
-            return false;
+                return false;
             insumo.cantidadInventario -= cantidad;
             await UpdateInsumo(insumo);
             return true;
@@ -75,40 +80,87 @@ namespace Medilink.Services
             }
         }
 
-        public async Task<bool> PedidoInsumos(int idInsumo, int cantidad)
-{
-    var insumo = await GetInsumo(idInsumo);
-    if (insumo == null) return false;
+        public async Task<bool> PedidoInsumos(List<Insumo> insumos, string presentacion, string unidadMedida, string prioridad)
+        {
+            int length = insumos.Count;
+            if (length == 0)
+                return false;
+            List<EnviarPedido> items = new List<EnviarPedido>();
 
-    var request = new
-    {//Ponerse de acuerdo con el otro grupo para tener un campo en comun "codigo" para hacer la request
-        id = insumo.Id,
-        cantidadInventario = cantidad
-    };
+                for (int i = 0; i < length; i++)
+                {
+                    if (insumos[i] == null)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        var insumo = _context.findById(insumos[i].Id);
+                        if (insumo != null)
+                        {
+                            items.Add(new EnviarPedido(
+                                codigo: insumo.Codigo,
+                                nombre: insumo.Nombre,
+                                presentacion: presentacion,
+                                cantidad: insumos[i].cantidadInventario,
+                                unidadMedida: unidadMedida,
+                                prioridad: prioridad));
+                        }
+                    }
+                }
 
-    var json = JsonSerializer.Serialize(request);
-    var content = new StringContent(json, Encoding.UTF8, "application/json");
-    //Falta hacer las pruebas para conectarse
-    var response = await _httpClient.PostAsync("https://api.proveedor.com/pedidos", content);
+                var request = new
+                {//Ponernos de acuerdo con el otro grupo para tener un campo en comun "codigo" para hacer la request
+                    hospitalId = "Medilink001",
+                    fechaPedido = DateTime.UtcNow,
+                    contacto = "Guardia",
+                    items = items
+                };
 
-    if (!response.IsSuccessStatusCode)
-        return false;
-    //Arreglar que efectivamente sea asi
-    var respuestaJson = await response.Content.ReadAsStringAsync();
-    var respuesta = JsonSerializer.Deserialize<RespuestaPedido>(respuestaJson);
+                var json = JsonSerializer.Serialize(request);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                //Falta hacer las pruebas para conectarse
+                var response = await _httpClient.PostAsync("https://api.proveedor.com/pedidos", content);
 
-    if (respuesta.estado != "Aprobado")
-        return false;
+                if (!response.IsSuccessStatusCode)
+                    return false;
+                //Arreglar que efectivamente sea asi
+                var respuestaJson = await response.Content.ReadAsStringAsync();
+                var respuesta = JsonSerializer.Deserialize<RespuestaPedido>(respuestaJson);
 
-    insumo.cantidadInventario += respuesta.cantidadEntregada;
-    await _context.SaveChangesAsync();
+                if (respuesta.Status == "REJECTED")
+                    return false;
 
-    return true;
-}
-public class RespuestaPedido
-{
-    public int cantidadEntregada { get; set; }
-    public string estado { get; set; }
-}
-}
+                insumo.cantidadInventario += respuesta.TotalConfirmado;
+                await _context.SaveChangesAsync();
+
+                return true;
+
+            }
+        }
+
+    
+    public class RespuestaPedido
+    {
+        public int PedidoId { get; set; }
+        public string Status { get; set; }
+        public List<ResumenItem> Items { get; set; }
+        public int TotalSolicitado { get; set; }
+        public int TotalConfirmado { get; set; }
+    }
+    public class ResumenItem
+    {
+        public string Codigo { get; set; }
+        public int CantidadSolicitada { get; set; }
+        public int CantidadConfirmada { get; set; }
+    }
+    public class EnviarPedido
+    {
+        public string codigo { get; set; }
+        public string nombre { get; set; }
+        public string presentacion { get; set; }
+        public int cantidad { get; set; }
+        public string unidadMedida { get; set; }
+        public string prioridad { get; set; }
+    }
 }
