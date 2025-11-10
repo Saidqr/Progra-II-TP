@@ -1,6 +1,5 @@
 using Medilink.Models;
 namespace Medilink.Interfaces
-//Implementar Said
 {
     public interface IInsumoService
     {

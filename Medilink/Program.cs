@@ -3,7 +3,6 @@ using Medilink.Interfaces;
 using Medilink.Services;
 using Medilink.Models;
 using Medilink.Middleware;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -23,6 +22,8 @@ builder.Services.AddControllers().AddJsonOptions(options =>
         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
         options.JsonSerializerOptions.MaxDepth = 64; // opcional
     });
+
+builder.Services.AddHttpClient();
 
 builder.Services.Configure<Auth>(builder.Configuration.GetSection("Jwt"));
 
@@ -53,48 +54,48 @@ builder.Services.AddSwaggerGen(c =>
         Version = "v1",
         Description = "API para gestión de consultas médicas y médicos."
     });
-    // c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    // {
-    //     Name = "Authorization",
-    //     Type = SecuritySchemeType.Http,
-    //     Scheme = "Bearer",
-    //     BearerFormat = "JWT",
-    //     In = ParameterLocation.Header,
-    //     Description = "Introduce el token JWT en este formato: Bearer {token}"
-    // });
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Introduce el token JWT en este formato: Bearer {token}"
+    });
 
     // Configuración de seguridad para API Key
-    // c.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
-    // {
-    //     Name = "X-API-KEY",
-    //     Type = SecuritySchemeType.ApiKey,
-    //     In = ParameterLocation.Header,
-    //     Description = "Introduce la API Key para autenticación entre servicios"
-    // });
-    // c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    // {
-    //     {
-    //         new OpenApiSecurityScheme
-    //         {
-    //             Reference = new OpenApiReference
-    //             {
-    //                 Type = ReferenceType.SecurityScheme,
-    //                 Id = "Bearer"
-    //             }
-    //         },
-    //         new string[] {}
-    //     },
-    //     {
-    //         new OpenApiSecurityScheme
-    //         {
-    //             Reference = new OpenApiReference
-    //             {
-    //                 Type = ReferenceType.SecurityScheme,
-    //                 Id = "ApiKey"
-    //             }
-    //         },
-    //         new string[] {}
-    //     } });
+    c.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
+    {
+        Name = "X-API-KEY",
+        Type = SecuritySchemeType.ApiKey,
+        In = ParameterLocation.Header,
+        Description = "Introduce la API Key para autenticación entre servicios"
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        },
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "ApiKey"
+                }
+            },
+            new string[] {}
+        } });
 });
 
 
