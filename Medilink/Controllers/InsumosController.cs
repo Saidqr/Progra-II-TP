@@ -57,6 +57,7 @@ public class InsumoController : ControllerBase
                 return BadRequest("Datos del pedido inválidos.");
 
             var insumo = await _insumoService.GetInsumo(request.IdInsumo);
+            if (insumo == null) return NotFound();
 
             var resultado = await _insumoService.PedidoInsumos(
                 insumo,
