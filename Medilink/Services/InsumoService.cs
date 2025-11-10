@@ -95,7 +95,7 @@ namespace Medilink.Services
                     }
                     else
                     {
-                        var insumo = _context.findById(insumos[i].Id);
+                        var insumo = _context.Insumos.findAsync(insumos[i].Id);
                         if (insumo != null)
                         {
                             items.Add(new EnviarPedido(
