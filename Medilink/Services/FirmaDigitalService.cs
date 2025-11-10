@@ -1,3 +1,7 @@
+using System.Text.Json;               // JsonSerializer
+using System.Security.Cryptography;   // HMACSHA256
+using System.Text;                    // Encoding
+
 public class FirmaDigitalService
 {
     private readonly string _secretKey;

@@ -80,58 +80,59 @@ namespace Medilink.Services
             }
         }
 
-        public async Task<bool> PedidoInsumos(Insumo insumo, string presentacion, string unidadMedida, string prioridad)
+        public async Task<bool> PedidoInsumos(Insumo ins, string presentacion, string unidadMedida, string prioridad)
         {
-            int length = insumos.Count;
-            if (length == 0)
-                return false;
+
             List<EnviarPedido> items = new List<EnviarPedido>();
 
-                
-                        var insumo = _context.Insumos.findAsync(insumo.Id);
-                        if (insumo != null)
-                        {
-                            items.Add(new EnviarPedido(
-                                codigo: insumo.Codigo,
-                                nombre: insumo.Nombre,
-                                presentacion: presentacion,
-                                cantidad: insumo.cantidadInventario,
-                                unidadMedida: unidadMedida,
-                                prioridad: prioridad));
-                        }
-        
 
-                var request = new
-                {//Ponernos de acuerdo con el otro grupo para tener un campo en comun "codigo" para hacer la request
-                    hospitalId = "Medilink001",
-                    fechaPedido = DateTime.UtcNow,
-                    contacto = "Guardia",
-                    items = items
-                };
-
-                var json = JsonSerializer.Serialize(request);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-                //Falta hacer las pruebas para conectarse
-                var response = await _httpClient.PostAsync("https://api.proveedor.com/pedidos", content);
-
-                if (!response.IsSuccessStatusCode)
-                    return false;
-                //Arreglar que efectivamente sea asi
-                var respuestaJson = await response.Content.ReadAsStringAsync();
-                var respuesta = JsonSerializer.Deserialize<RespuestaPedido>(respuestaJson);
-
-                if (respuesta.Status == "REJECTED")
-                    return false;
-
-                insumo.cantidadInventario += respuesta.TotalConfirmado;
-                await _context.SaveChangesAsync();
-
-                return true;
+            var insumo = _context.Insumos.Find(ins.Id);
+            if (insumo != null)
+            {
+                items.Add(new EnviarPedido
+                {
+                    Codigo = insumo.Codigo,
+                    Nombre = insumo.Nombre,
+                    Presentacion = presentacion,
+                    Cantidad = insumo.cantidadInventario,
+                    UnidadMedida = unidadMedida,
+                    Prioridad = prioridad
+                });
 
             }
-        }
 
-    
+
+            var request = new
+            {//Ponernos de acuerdo con el otro grupo para tener un campo en comun "codigo" para hacer la request
+                hospitalId = "Medilink001",
+                fechaPedido = DateTime.UtcNow,
+                contacto = "Guardia",
+                items = items
+            };
+
+            var json = JsonSerializer.Serialize(request);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            //Falta hacer las pruebas para conectarse
+            var response = await _httpClient.PostAsync("https://api.proveedor.com/pedidos", content);
+
+            if (!response.IsSuccessStatusCode)
+                return false;
+            //Arreglar que efectivamente sea asi
+            var respuestaJson = await response.Content.ReadAsStringAsync();
+            var respuesta = JsonSerializer.Deserialize<RespuestaPedido>(respuestaJson);
+
+            if (respuesta.Status == "REJECTED")
+                return false;
+
+            insumo.cantidadInventario += respuesta.TotalConfirmado;
+            await _context.SaveChangesAsync();
+
+            return true;
+
+        }
+    }
+
+
     public class RespuestaPedido
     {
         public int PedidoId { get; set; }
@@ -148,11 +149,11 @@ namespace Medilink.Services
     }
     public class EnviarPedido
     {
-        public string codigo { get; set; }
-        public string nombre { get; set; }
-        public string presentacion { get; set; }
-        public int cantidad { get; set; }
-        public string unidadMedida { get; set; }
-        public string prioridad { get; set; }
+        public string Codigo { get; set; }
+        public string Nombre { get; set; }
+        public string Presentacion { get; set; }
+        public int Cantidad { get; set; }
+        public string UnidadMedida { get; set; }
+        public string Prioridad { get; set; }
     }
 }

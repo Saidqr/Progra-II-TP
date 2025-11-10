@@ -13,8 +13,11 @@ namespace Medilink.Services
         }
         public async Task<ConsultaMedica> AddConsulta(ConsultaMedica consulta)
         {
-            _context.Consultas.AddAsync(consulta);
-            _context.SaveChangesAsync();
+            consulta.Medico = await _context.Medicos.FindAsync(consulta.IdMedico);
+            consulta.Paciente = await _context.Pacientes.FindAsync(consulta.IdPaciente);
+            consulta.Receta = await _context.Recetas.FindAsync(consulta.IdReceta);
+            await _context.Consultas.AddAsync(consulta);
+            await _context.SaveChangesAsync();
             return consulta;
         }
 

@@ -28,8 +28,11 @@ namespace Medilink.Services
             var consulta = await _dbContext.Consultas.FindAsync(idConsulta);
 
             if (consulta == null) throw new InvalidOperationException($"No se encontró una consulta médica con ID {idConsulta}.");
-
+            
             await _dbContext.Recetas.AddAsync(receta);
+            await _dbContext.SaveChangesAsync();
+            consulta.IdReceta = receta.Id;
+            consulta.Receta = receta;
             await _dbContext.SaveChangesAsync();
             return receta;
         }
