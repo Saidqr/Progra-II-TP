@@ -80,34 +80,26 @@ namespace Medilink.Services
             }
         }
 
-        public async Task<bool> PedidoInsumos(List<Insumo> insumos, string presentacion, string unidadMedida, string prioridad)
+        public async Task<bool> PedidoInsumos(Insumo insumo, string presentacion, string unidadMedida, string prioridad)
         {
             int length = insumos.Count;
             if (length == 0)
                 return false;
             List<EnviarPedido> items = new List<EnviarPedido>();
 
-                for (int i = 0; i < length; i++)
-                {
-                    if (insumos[i] == null)
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        var insumo = _context.Insumos.findAsync(insumos[i].Id);
+                
+                        var insumo = _context.Insumos.findAsync(insumo.Id);
                         if (insumo != null)
                         {
                             items.Add(new EnviarPedido(
                                 codigo: insumo.Codigo,
                                 nombre: insumo.Nombre,
                                 presentacion: presentacion,
-                                cantidad: insumos[i].cantidadInventario,
+                                cantidad: insumo.cantidadInventario,
                                 unidadMedida: unidadMedida,
                                 prioridad: prioridad));
                         }
-                    }
-                }
+        
 
                 var request = new
                 {//Ponernos de acuerdo con el otro grupo para tener un campo en comun "codigo" para hacer la request
