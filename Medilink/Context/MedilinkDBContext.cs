@@ -77,6 +77,7 @@ namespace Medilink.Context
                 entity.HasKey(i => i.Id);
                 
                 entity.Property(i => i.Nombre).IsRequired();
+                entity.Property(i => i.Codigo).HasMaxLength(50);
                 entity.Property(i => i.Descripcion).IsRequired();
                 entity.Property(i => i.cantidadInventario).IsRequired();
                 
